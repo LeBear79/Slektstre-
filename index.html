@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mitt Slektstre 4.0</title>
+<style>
+:root{
+  --green:#314e3a;
+  --green-2:#617b5e;
+  --cream:#fbf7eb;
+  --paper:#fffdf7;
+  --gold:#a98542;
+  --gold-dark:#6d5428;
+  --ink:#2b241b;
+  --muted:#756d61;
+  --panel:#ffffff;
+  --bg:#e9e5dc;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
+.sidebar{background:var(--panel);border-right:1px solid #d7d0c4;padding:20px;overflow:auto}
+.sidebar h1{margin:0;color:var(--green);font-size:28px}
+.lead{margin:6px 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px}
+.progress{height:9px;background:#e7e1d7;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;background:var(--green);width:0}
+.editor{margin-top:16px;border:1px solid #ddd5c8;border-radius:14px;padding:15px}
+.kicker{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase}
+.editor h2{margin:4px 0}
+.note{font-size:13px;color:var(--muted);margin:0 0 14px}
+.preview{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:#e5e0d6;border:3px solid #fff;outline:1px solid var(--gold);overflow:hidden;font-size:24px;color:#777;font-weight:700}
+.preview img{width:100%;height:100%;object-fit:cover}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+.field input,.field select{width:100%;padding:10px;border:1px solid #cfc7bb;border-radius:8px;background:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.buttons{display:grid;gap:8px;margin-top:12px}
+.button-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button,.file-btn{border:0;border-radius:8px;padding:10px 12px;font-weight:700;text-align:center;display:block}
+.primary{background:var(--green);color:#fff}
+.secondary{background:#ece8e0;color:#352f28}
+.ghost{background:#faf8f4;border:1px solid #ddd5c8;color:#4a443c}
+.danger{background:#f4dddd;color:#8b3333}
+.file-btn{background:var(--green);color:#fff;cursor:pointer}
+.file-btn.alt{background:#ece8e0;color:#352f28}
+.hidden{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.help{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+.jump{margin-top:16px;padding-top:15px;border-top:1px solid #e2dbd0}
+.info{margin-top:14px;background:#edf2ec;color:#3b523f;border-radius:9px;padding:11px;font-size:12px;line-height:1.4}
+
+.workspace{padding:18px;overflow:auto}
+.toolbar{width:1400px;margin:0 auto 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
+.toolbar-actions{display:flex;gap:8px}
+.poster-wrap{min-width:1400px}
+.poster{
+  width:1400px;height:990px;margin:0 auto;position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 95%,rgba(180,145,74,.13),transparent 28%),
+    linear-gradient(#fffdf8,#fbf6e9);
+  border:13px ridge #96713a;
+  box-shadow:0 10px 28px rgba(0,0,0,.15);
+}
+.poster:before{content:"";position:absolute;inset:13px;border:1px solid rgba(105,77,34,.55);pointer-events:none}
+.poster:after{content:"";position:absolute;inset:21px;border:1px solid rgba(105,77,34,.18);pointer-events:none}
+.title{position:absolute;top:34px;left:0;right:0;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:51px;letter-spacing:2px;margin:0;font-weight:500;z-index:8}
+.subtitle{position:absolute;top:96px;left:0;right:0;text-align:center;letter-spacing:6px;text-transform:uppercase;font-size:12px;z-index:8}
+.ornament{position:absolute;top:121px;left:470px;right:470px;border-top:1px solid var(--gold);z-index:8}
+.ornament:before,.ornament:after{content:"";position:absolute;top:-5px;width:9px;height:9px;border:1px solid var(--gold);background:var(--cream);transform:rotate(45deg)}
+.ornament:before{left:55px}.ornament:after{right:55px}
+
+.oak{position:absolute;inset:145px 100px 35px;z-index:0;opacity:.56}
+.oak svg{width:100%;height:100%}
+.connections{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.tree{position:absolute;inset:150px 40px 35px;z-index:4;display:flex;flex-direction:column;justify-content:space-between}
+.gen{display:grid;justify-items:center;align-items:start}
+.g4{grid-template-columns:repeat(16,1fr);gap:4px}
+.g3{grid-template-columns:repeat(8,1fr);gap:14px;padding:0 52px}
+.g2{grid-template-columns:repeat(4,1fr);gap:75px;padding:0 145px}
+.g1{grid-template-columns:repeat(2,1fr);gap:300px;padding:0 330px}
+.g0{grid-template-columns:1fr;padding:0 560px}
+
+.person{position:relative;text-align:center;cursor:pointer;filter:drop-shadow(0 2px 2px rgba(40,30,15,.12))}
+.person.active .portrait{box-shadow:0 0 0 5px rgba(49,78,58,.2)}
+.portrait{width:70px;height:70px;margin:0 auto -7px;border-radius:50%;border:4px solid #fffaf0;outline:2px solid var(--gold);background:#ddd8ce;object-fit:cover;display:grid;place-items:center;font-weight:700;color:#6c685f;position:relative;z-index:2}
+.plate{min-width:94px;max-width:135px;margin:0 auto;background:linear-gradient(#fffef9,#f5ead2);border:1px solid var(--gold-dark);padding:9px 6px 7px;position:relative;z-index:1}
+.plate:before,.plate:after{content:"";position:absolute;top:5px;bottom:5px;width:7px;border-top:1px solid var(--gold-dark);border-bottom:1px solid var(--gold-dark)}
+.plate:before{left:-7px}.plate:after{right:-7px}
+.pname{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:13px;line-height:1.08;overflow-wrap:anywhere}
+.years{font-size:10px;color:#493f32;margin-top:3px}
+
+.g4 .portrait{width:47px;height:47px;border-width:2px;outline-width:1px}
+.g4 .plate{min-width:67px;max-width:78px;padding:6px 2px 5px}
+.g4 .pname{font-size:8px}
+.g4 .years{font-size:7px}
+.g3 .portrait{width:58px;height:58px}
+.g3 .plate{min-width:82px;max-width:98px}
+.g3 .pname{font-size:10px}
+.g2 .portrait{width:84px;height:84px}
+.g2 .plate{min-width:122px;max-width:145px}
+.g2 .pname{font-size:15px}
+.g2 .years{font-size:11px}
+.g1 .portrait{width:105px;height:105px}
+.g1 .plate{min-width:155px;max-width:180px;padding:11px 8px 9px}
+.g1 .pname{font-size:18px}
+.g1 .years{font-size:12px}
+.g0 .portrait{width:145px;height:145px;border-width:5px;outline-width:3px}
+.g0 .plate{min-width:220px;max-width:245px;padding:14px 12px 11px}
+.g0 .pname{font-size:27px;letter-spacing:1px}
+.g0 .years{font-size:16px}
+
+.legend{position:absolute;left:46px;bottom:38px;font-size:12px;color:#5a5145;z-index:8}
+.quote{position:absolute;right:55px;bottom:40px;width:300px;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:14px;z-index:8}
+.preview-exit{display:none;position:fixed;right:12px;top:12px;z-index:1000;background:#fff;color:var(--green);border:1px solid #d5cec2;box-shadow:0 3px 12px rgba(0,0,0,.15)}
+body.preview-mode .sidebar,body.preview-mode .toolbar{display:none}
+body.preview-mode .app{display:block}
+body.preview-mode .workspace{padding:12px;overflow:visible}
+body.preview-mode .poster-wrap{min-width:0;display:flex;justify-content:center}
+body.preview-mode .poster{transform-origin:top center}
+body.preview-mode .preview-exit{display:block}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{border-right:0;border-bottom:1px solid #d7d0c4}
+}
+@media print{
+  @page{size:A3 landscape;margin:4mm}
+  body{background:#fff}
+  .sidebar,.toolbar,.preview-exit{display:none!important}
+  .app{display:block}
+  .workspace{padding:0;overflow:visible}
+  .poster-wrap{min-width:0;height:auto!important}
+  .poster{width:100%;height:auto;aspect-ratio:1.414/1;box-shadow:none;transform:none!important}
+}
+</style>
+</head>
+<body>
+<button class="preview-exit" id="previewExit">Tilbake til redigering</button>
+<div class="app">
+<aside class="sidebar">
+  <h1>Mitt Slektstre</h1>
+  <p class="lead">Registrer én person om gangen. Plakaten oppdateres automatisk.</p>
+  <div class="progress-head"><span id="stepText">Steg 1 av 31</span><span id="countText">0 registrert</span></div>
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="editor">
+    <div class="kicker" id="generationLabel">Hovedperson</div>
+    <h2 id="relationLabel">Hovedperson</h2>
+    <p class="note" id="relationNote"></p>
+    <div class="preview" id="photoPreview">?</div>
+
+    <div class="field">
+      <label for="name">Fullt navn</label>
+      <input id="name" type="text" placeholder="Skriv inn fullt navn">
+    </div>
+    <div class="row">
+      <div class="field"><label for="birth">Fødselsår</label><input id="birth" type="number" placeholder="ÅÅÅÅ"></div>
+      <div class="field"><label for="death">Dødsår</label><input id="death" type="number" placeholder="Valgfritt"></div>
+    </div>
+
+    <div class="field">
+      <label>Bilde</label>
+      <label class="file-btn" for="camera">Ta bilde med kamera</label>
+      <input class="hidden" id="camera" type="file" accept="image/*" capture="environment">
+      <label class="file-btn alt" style="margin-top:8px" for="gallery">Velg bilde fra enheten</label>
+      <input class="hidden" id="gallery" type="file" accept="image/*">
+      <div class="help">På mobil åpner den første knappen kameraet.</div>
+    </div>
+
+    <div class="buttons">
+      <button class="primary" id="saveNext">Lagre og gå videre</button>
+      <div class="button-row"><button class="secondary" id="prev">Forrige</button><button class="secondary" id="next">Neste</button></div>
+      <button class="ghost" id="removePhoto">Fjern bilde</button>
+    </div>
+  </section>
+
+  <div class="jump">
+    <div class="field"><label for="personSelect">Gå direkte til en person</label><select id="personSelect"></select></div>
+  </div>
+
+  <div class="buttons">
+    <button class="primary" id="showPoster">Vis ferdig plakat</button>
+    <button class="secondary" id="printPoster">Skriv ut / lagre som PDF</button>
+    <button class="secondary" id="exportData">Eksporter sikkerhetskopi</button>
+    <label class="file-btn alt" for="importData">Importer sikkerhetskopi</label>
+    <input class="hidden" id="importData" type="file" accept=".json,application/json">
+    <button class="danger" id="resetAll">Nullstill hele treet</button>
+  </div>
+  <div class="info">Data og bilder lagres lokalt i nettleseren på denne enheten. Lag gjerne en sikkerhetskopi.</div>
+</aside>
+
+<main class="workspace">
+  <div class="toolbar">
+    <span>Klikk på en person i plakaten for å redigere.</span>
+    <div class="toolbar-actions">
+      <button class="primary" id="topShowPoster">Vis plakat</button>
+      <button class="secondary" id="topPrint">Lag PDF</button>
+    </div>
+  </div>
+
+  <div class="poster-wrap">
+    <section class="poster" id="poster">
+      <h1 class="title" id="posterTitle">MITT SLEKTSTRE</h1>
+      <div class="subtitle">Familien er der livet begynner</div>
+      <div class="ornament"></div>
+
+      <div class="oak" aria-hidden="true">
+        <svg viewBox="0 0 1200 780">
+          <defs>
+            <linearGradient id="trunk" x1="0" x2="1">
+              <stop offset="0" stop-color="#8f6a3f"/>
+              <stop offset=".5" stop-color="#b5905c"/>
+              <stop offset="1" stop-color="#7a5836"/>
+            </linearGradient>
+          </defs>
+          <g fill="none" stroke-linecap="round">
+            <path d="M600 780 C575 685 580 615 592 540 C605 455 610 360 600 275" stroke="url(#trunk)" stroke-width="46"/>
+            <path d="M595 635 C500 570 405 520 285 470" stroke="url(#trunk)" stroke-width="23"/>
+            <path d="M605 635 C700 570 795 520 915 470" stroke="url(#trunk)" stroke-width="23"/>
+            <path d="M590 520 C480 445 365 390 225 345" stroke="url(#trunk)" stroke-width="17"/>
+            <path d="M610 520 C720 445 835 390 975 345" stroke="url(#trunk)" stroke-width="17"/>
+            <path d="M596 405 C500 340 415 290 315 230" stroke="url(#trunk)" stroke-width="12"/>
+            <path d="M604 405 C700 340 785 290 885 230" stroke="url(#trunk)" stroke-width="12"/>
+            <path d="M600 320 C530 265 485 220 425 175" stroke="url(#trunk)" stroke-width="9"/>
+            <path d="M600 320 C670 265 715 220 775 175" stroke="url(#trunk)" stroke-width="9"/>
+          </g>
+          <g fill="#6f8d63">
+            <ellipse cx="270" cy="460" rx="70" ry="24" transform="rotate(-16 270 460)"/>
+            <ellipse cx="360" cy="500" rx="72" ry="25" transform="rotate(20 360 500)"/>
+            <ellipse cx="455" cy="555" rx="75" ry="25" transform="rotate(-17 455 555)"/>
+            <ellipse cx="930" cy="460" rx="70" ry="24" transform="rotate(16 930 460)"/>
+            <ellipse cx="840" cy="500" rx="72" ry="25" transform="rotate(-20 840 500)"/>
+            <ellipse cx="745" cy="555" rx="75" ry="25" transform="rotate(17 745 555)"/>
+            <ellipse cx="210" cy="330" rx="64" ry="22" transform="rotate(-15 210 330)"/>
+            <ellipse cx="335" cy="390" rx="65" ry="22" transform="rotate(25 335 390)"/>
+            <ellipse cx="990" cy="330" rx="64" ry="22" transform="rotate(15 990 330)"/>
+            <ellipse cx="865" cy="390" rx="65" ry="22" transform="rotate(-25 865 390)"/>
+            <ellipse cx="320" cy="220" rx="55" ry="19" transform="rotate(25 320 220)"/>
+            <ellipse cx="420" cy="285" rx="55" ry="19" transform="rotate(-25 420 285)"/>
+            <ellipse cx="880" cy="220" rx="55" ry="19" transform="rotate(-25 880 220)"/>
+            <ellipse cx="780" cy="285" rx="55" ry="19" transform="rotate(25 780 285)"/>
+          </g>
+        </svg>
+      </div>
+
+      <svg class="connections" id="connections"></svg>
+      <div class="tree" id="tree"></div>
+      <div class="legend">Fra hovedpersonen nederst til tippoldeforeldrene øverst.</div>
+      <div class="quote">«Røtter dypere enn vi vet, bånd sterkere enn tiden.»</div>
+    </section>
+  </div>
+</main>
+</div>
+
+<script>
+const STORAGE_KEY='mitt_slektstre_v4';
+const generations={
+  0:['Hovedperson'],
+  1:['Mor','Far'],
+  2:['Mormor','Morfar','Farmor','Farfar'],
+  3:['Mormors mor','Mormors far','Morfars mor','Morfars far','Farmors mor','Farmors far','Farfars mor','Farfars far'],
+  4:['Mormors mormor','Mormors morfar','Mormors farmor','Mormors farfar','Morfars mormor','Morfars morfar','Morfars farmor','Morfars farfar','Farmors mormor','Farmors morfar','Farmors farmor','Farmors farfar','Farfars mormor','Farfars morfar','Farfars farmor','Farfars farfar']
+};
+const generationNames={0:'Hovedperson',1:'Foreldre',2:'Besteforeldre',3:'Oldeforeldre',4:'Tippoldeforeldre'};
+const slots=[];
+Object.entries(generations).forEach(([g,arr])=>arr.forEach((label,index)=>slots.push({id:`g${g}_${index}`,generation:Number(g),index,label})));
+
+let people={};
+try{people=JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch{}
+let current=0;
+let pendingPhoto='';
+
+const $=id=>document.getElementById(id);
+const currentSlot=()=>slots[current];
+const initials=name=>name?name.trim().split(/\s+/).slice(0,2).map(p=>p[0]?.toUpperCase()||'').join(''):'?';
+const firstName=name=>(name||'').trim().split(/\s+/)[0]||'Mitt';
+
+function saveStorage(){localStorage.setItem(STORAGE_KEY,JSON.stringify(people))}
+function relationNote(s){
+  if(s.generation===0)return'Start med personen slektstreet skal lages for.';
+  if(s.generation===1)return`Registrer ${s.label.toLowerCase()} til hovedpersonen.`;
+  return`Registrer ${s.label.toLowerCase()} i slektstreet.`;
+}
+function updatePhotoPreview(){
+  const box=$('photoPreview');box.innerHTML='';
+  if(pendingPhoto){const img=document.createElement('img');img.src=pendingPhoto;box.appendChild(img)}
+  else box.textContent=initials($('name').value);
+}
+function fillSelect(){
+  const select=$('personSelect');select.innerHTML='';
+  for(let g=0;g<=4;g++){
+    const group=document.createElement('optgroup');group.label=generationNames[g];
+    slots.filter(s=>s.generation===g).forEach(s=>{
+      const option=document.createElement('option');
+      option.value=s.id;
+      option.textContent=people[s.id]?.name?`${s.label}: ${people[s.id].name}`:s.label;
+      group.appendChild(option);
+    });
+    select.appendChild(group);
+  }
+  select.value=currentSlot().id;
+}
+function updateProgress(){
+  const count=slots.filter(s=>people[s.id]?.name).length;
+  $('stepText').textContent=`Steg ${current+1} av ${slots.length}`;
+  $('countText').textContent=`${count} registrert`;
+  $('progressBar').style.width=`${((current+1)/slots.length)*100}%`;
+}
+function loadForm(){
+  const s=currentSlot(),p=people[s.id]||{};
+  pendingPhoto=p.photo||'';
+  $('generationLabel').textContent=generationNames[s.generation];
+  $('relationLabel').textContent=s.label;
+  $('relationNote').textContent=relationNote(s);
+  $('name').value=p.name||'';
+  $('birth').value=p.birth||'';
+  $('death').value=p.death||'';
+  updatePhotoPreview();
+  fillSelect();
+  updateProgress();
+  renderTree();
+}
+function saveForm(){
+  people[currentSlot().id]={
+    name:$('name').value.trim(),
+    birth:$('birth').value.trim(),
+    death:$('death').value.trim(),
+    photo:pendingPhoto
+  };
+  saveStorage();
+  fillSelect();
+  updateProgress();
+  renderTree();
+}
+function move(step){
+  current=Math.max(0,Math.min(slots.length-1,current+step));
+  loadForm();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function compressImage(file,callback){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const size=500,canvas=document.createElement('canvas');
+      canvas.width=canvas.height=size;
+      const ctx=canvas.getContext('2d');
+      const scale=Math.max(size/img.width,size/img.height);
+      const w=img.width*scale,h=img.height*scale;
+      ctx.drawImage(img,(size-w)/2,(size-h)/2,w,h);
+      callback(canvas.toDataURL('image/jpeg',.86));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function useImage(file){
+  if(!file)return;
+  compressImage(file,data=>{pendingPhoto=data;updatePhotoPreview()});
+}
+function renderTree(){
+  const tree=$('tree');tree.innerHTML='';
+  for(let g=4;g>=0;g--){
+    const row=document.createElement('div');row.className=`gen g${g}`;
+    slots.filter(s=>s.generation===g).forEach(s=>{
+      const p=people[s.id]||{};
+      const card=document.createElement('div');
+      card.className=`person ${s.id===currentSlot().id?'active':''}`;
+      card.dataset.slot=s.id;
+
+      if(p.photo){
+        const img=document.createElement('img');
+        img.className='portrait';img.src=p.photo;img.alt=p.name||s.label;
+        card.appendChild(img);
+      }else{
+        const ph=document.createElement('div');
+        ph.className='portrait';ph.textContent=initials(p.name);
+        card.appendChild(ph);
+      }
+
+      const plate=document.createElement('div');plate.className='plate';
+      const name=document.createElement('div');name.className='pname';name.textContent=p.name||s.label;
+      const years=document.createElement('div');years.className='years';
+      years.textContent=p.birth?(p.death?`${p.birth}–${p.death}`:`${p.birth}–`):'';
+      plate.append(name,years);card.appendChild(plate);
+
+      card.addEventListener('click',()=>{
+        current=slots.findIndex(x=>x.id===s.id);
+        loadForm();
+      });
+      row.appendChild(card);
+    });
+    tree.appendChild(row);
+  }
+  const main=people.g0_0;
+  $('posterTitle').textContent=main?.name?`${firstName(main.name).toUpperCase()}S SLEKTSTRE`:'MITT SLEKTSTRE';
+  requestAnimationFrame(drawConnections);
+}
+function drawConnections(){
+  const svg=$('connections'),poster=$('poster'),pr=poster.getBoundingClientRect();
+  svg.innerHTML='';
+  svg.setAttribute('viewBox',`0 0 ${pr.width} ${pr.height}`);
+  const point=(id,top)=>{
+    const el=poster.querySelector(`[data-slot="${id}"]`);
+    if(!el)return null;
+    const r=el.getBoundingClientRect();
+    return{x:r.left-pr.left+r.width/2,y:(top?r.top:r.bottom)-pr.top};
+  };
+  const add=(a,b)=>{
+    if(!a||!b)return;
+    const mid=(a.y+b.y)/2;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',`M ${a.x} ${a.y} C ${a.x} ${mid}, ${b.x} ${mid}, ${b.x} ${b.y}`);
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke','#8b6a34');
+    p.setAttribute('stroke-width','2.2');
+    p.setAttribute('stroke-linecap','round');
+    p.setAttribute('opacity','.9');
+    svg.appendChild(p);
+  };
+  for(let g=0;g<4;g++){
+    slots.filter(s=>s.generation===g).forEach(child=>{
+      add(point(child.id,true),point(`g${g+1}_${child.index*2}`,false));
+      add(point(child.id,true),point(`g${g+1}_${child.index*2+1}`,false));
+    });
+  }
+}
+function fitPoster(){
+  const poster=$('poster'),wrap=document.querySelector('.poster-wrap');
+  if(!document.body.classList.contains('preview-mode')){
+    poster.style.transform='';
+    wrap.style.height='';
+    return;
+  }
+  const scale=Math.min(1,(window.innerWidth-24)/poster.offsetWidth);
+  poster.style.transform=`scale(${scale})`;
+  wrap.style.height=`${poster.offsetHeight*scale}px`;
+  requestAnimationFrame(drawConnections);
+}
+function openPoster(){
+  saveForm();
+  document.body.classList.add('preview-mode');
+  window.scrollTo(0,0);
+  requestAnimationFrame(fitPoster);
+}
+function closePoster(){
+  document.body.classList.remove('preview-mode');
+  fitPoster();
+  requestAnimationFrame(drawConnections);
+}
+function exportBackup(){
+  saveForm();
+  const blob=new Blob([JSON.stringify({app:'Mitt Slektstre 4.0',people},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='slektstre-sikkerhetskopi.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function importBackup(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const obj=JSON.parse(e.target.result);
+      if(!obj.people)throw new Error();
+      if(confirm('Dette erstatter dataene som ligger på denne enheten. Fortsette?')){
+        people=obj.people;
+        saveStorage();
+        current=0;
+        loadForm();
+      }
+    }catch{
+      alert('Kunne ikke lese sikkerhetskopien.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+$('saveNext').onclick=()=>{saveForm();if(current<slots.length-1)move(1)};
+$('prev').onclick=()=>{saveForm();move(-1)};
+$('next').onclick=()=>{saveForm();move(1)};
+$('removePhoto').onclick=()=>{pendingPhoto='';updatePhotoPreview()};
+$('camera').onchange=e=>useImage(e.target.files[0]);
+$('gallery').onchange=e=>useImage(e.target.files[0]);
+$('name').oninput=updatePhotoPreview;
+$('personSelect').onchange=e=>{saveForm();current=slots.findIndex(s=>s.id===e.target.value);loadForm()};
+$('showPoster').onclick=openPoster;
+$('topShowPoster').onclick=openPoster;
+$('previewExit').onclick=closePoster;
+$('printPoster').onclick=()=>{saveForm();setTimeout(()=>window.print(),100)};
+$('topPrint').onclick=()=>{saveForm();setTimeout(()=>window.print(),100)};
+$('exportData').onclick=exportBackup;
+$('importData').onchange=e=>importBackup(e.target.files[0]);
+$('resetAll').onclick=()=>{
+  if(confirm('Vil du slette alle personer og bilder?')){
+    people={};saveStorage();current=0;pendingPhoto='';loadForm();
+  }
+};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePoster()});
+window.addEventListener('resize',()=>{requestAnimationFrame(drawConnections);requestAnimationFrame(fitPoster)});
+loadForm();
+</script>
+</body>
+</html>
