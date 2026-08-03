@@ -1,146 +1,236 @@
 <!doctype html>
+<!-- Mitt Slektstre 5.5: enkel biografi per person -->
 <html lang="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mitt Slektstre 4.0</title>
+<title>Mitt Slektstre 5.5</title>
 <style>
 :root{
-  --green:#314e3a;
-  --green-2:#617b5e;
-  --cream:#fbf7eb;
-  --paper:#fffdf7;
-  --gold:#a98542;
-  --gold-dark:#6d5428;
-  --ink:#2b241b;
-  --muted:#756d61;
-  --panel:#ffffff;
-  --bg:#e9e5dc;
+  --green:#385b43;--green-soft:#eef3ea;--ink:#25231f;--muted:#746f66;
+  --paper:#fffdf8;--canvas:#e7e4de;--line:#9b8b72;
+  --mother:#d9a79e;--mother-bg:#fff7f4;--father:#9db5cf;--father-bg:#f5f9fd;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{display:grid;grid-template-columns:360px 1fr;min-height:100vh}
-.sidebar{background:var(--panel);border-right:1px solid #d7d0c4;padding:20px;overflow:auto}
-.sidebar h1{margin:0;color:var(--green);font-size:28px}
-.lead{margin:6px 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--canvas)}
+button,input,select{font:inherit} button{cursor:pointer}
+.app{display:grid;grid-template-columns:340px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#fff;border-right:1px solid #ddd8cf;padding:20px;overflow:auto}
+.sidebar h1{margin:0;color:var(--green);font:700 28px Georgia,serif}
+.lead{margin:7px 0 16px;color:var(--muted);font-size:14px;line-height:1.45}
 .progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px}
-.progress{height:9px;background:#e7e1d7;border-radius:999px;overflow:hidden}
-.progress>div{height:100%;background:var(--green);width:0}
-.editor{margin-top:16px;border:1px solid #ddd5c8;border-radius:14px;padding:15px}
-.kicker{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase}
-.editor h2{margin:4px 0}
-.note{font-size:13px;color:var(--muted);margin:0 0 14px}
-.preview{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:#e5e0d6;border:3px solid #fff;outline:1px solid var(--gold);overflow:hidden;font-size:24px;color:#777;font-weight:700}
-.preview img{width:100%;height:100%;object-fit:cover}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
-.field input,.field select{width:100%;padding:10px;border:1px solid #cfc7bb;border-radius:8px;background:#fff}
+.progress{height:8px;background:#ebe7df;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:var(--green);width:0}
+.editor{margin-top:16px;border:1px solid #ddd7cd;border-radius:12px;padding:15px;background:#fffdfa}
+.kicker{font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em}.editor h2{margin:4px 0}.note{font-size:13px;color:var(--muted);margin:0 0 14px}
+.preview{width:92px;height:92px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:#e7e3da;border:3px solid #fff;outline:1px solid #b9aa91;overflow:hidden;font-size:24px;color:#777;font-weight:700}.preview img{width:100%;height:100%;object-fit:cover}
+.field{margin-bottom:12px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #cfc9bf;border-radius:7px;background:#fff}
+.field textarea{min-height:190px;resize:vertical;line-height:1.5}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.buttons{display:grid;gap:8px;margin-top:12px}
-.button-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-button,.file-btn{border:0;border-radius:8px;padding:10px 12px;font-weight:700;text-align:center;display:block}
-.primary{background:var(--green);color:#fff}
-.secondary{background:#ece8e0;color:#352f28}
-.ghost{background:#faf8f4;border:1px solid #ddd5c8;color:#4a443c}
-.danger{background:#f4dddd;color:#8b3333}
-.file-btn{background:var(--green);color:#fff;cursor:pointer}
-.file-btn.alt{background:#ece8e0;color:#352f28}
-.hidden{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
-.help{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
-.jump{margin-top:16px;padding-top:15px;border-top:1px solid #e2dbd0}
-.info{margin-top:14px;background:#edf2ec;color:#3b523f;border-radius:9px;padding:11px;font-size:12px;line-height:1.4}
+.more-details{margin:13px 0 0;border-top:1px solid #e2ddd5;padding-top:12px}
+.more-details summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--green);padding:3px 0 10px}
+.more-details[open] summary{margin-bottom:4px}
 
-.workspace{padding:18px;overflow:auto}
-.toolbar{width:1400px;margin:0 auto 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}
-.toolbar-actions{display:flex;gap:8px}
-.poster-wrap{min-width:1400px}
-.poster{
-  width:1400px;height:990px;margin:0 auto;position:relative;overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 95%,rgba(180,145,74,.13),transparent 28%),
-    linear-gradient(#fffdf8,#fbf6e9);
-  border:13px ridge #96713a;
-  box-shadow:0 10px 28px rgba(0,0,0,.15);
+  .detail-profile{align-items:flex-start}
+  .detail-photo{width:78px;height:78px}
 }
-.poster:before{content:"";position:absolute;inset:13px;border:1px solid rgba(105,77,34,.55);pointer-events:none}
-.poster:after{content:"";position:absolute;inset:21px;border:1px solid rgba(105,77,34,.18);pointer-events:none}
-.title{position:absolute;top:34px;left:0;right:0;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:51px;letter-spacing:2px;margin:0;font-weight:500;z-index:8}
-.subtitle{position:absolute;top:96px;left:0;right:0;text-align:center;letter-spacing:6px;text-transform:uppercase;font-size:12px;z-index:8}
-.ornament{position:absolute;top:121px;left:470px;right:470px;border-top:1px solid var(--gold);z-index:8}
-.ornament:before,.ornament:after{content:"";position:absolute;top:-5px;width:9px;height:9px;border:1px solid var(--gold);background:var(--cream);transform:rotate(45deg)}
-.ornament:before{left:55px}.ornament:after{right:55px}
+.buttons{display:grid;gap:8px;margin-top:12px}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button,.file-btn{border:0;border-radius:7px;padding:10px 12px;font-weight:700;text-align:center;display:block}.primary{background:var(--green);color:#fff}.secondary{background:#ece9e3;color:#352f28}.ghost{background:#faf8f4;border:1px solid #ddd6cb;color:#4a443c}.danger{background:#f4dddd;color:#8b3333}.file-btn{background:var(--green);color:#fff;cursor:pointer}.file-btn.alt{background:#ece9e3;color:#352f28}.hidden{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}.help{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}.jump{margin-top:16px;padding-top:15px;border-top:1px solid #e2ddd5}.info{margin-top:14px;background:#edf2ec;color:#3b523f;border-radius:8px;padding:11px;font-size:12px;line-height:1.4}
 
-.oak{position:absolute;inset:145px 100px 35px;z-index:0;opacity:.56}
-.oak svg{width:100%;height:100%}
-.connections{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
-.tree{position:absolute;inset:150px 40px 35px;z-index:4;display:flex;flex-direction:column;justify-content:space-between}
-.gen{display:grid;justify-items:center;align-items:start}
-.g4{grid-template-columns:repeat(16,1fr);gap:4px}
-.g3{grid-template-columns:repeat(8,1fr);gap:14px;padding:0 52px}
-.g2{grid-template-columns:repeat(4,1fr);gap:75px;padding:0 145px}
-.g1{grid-template-columns:repeat(2,1fr);gap:300px;padding:0 330px}
-.g0{grid-template-columns:1fr;padding:0 560px}
+.workspace{padding:18px;overflow:auto}.toolbar{width:1500px;margin:0 auto 10px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted)}.toolbar-actions{display:flex;gap:8px}.poster-wrap{min-width:1500px}
+.poster{width:1500px;height:1061px;margin:0 auto;position:relative;overflow:hidden;background:linear-gradient(180deg,#fffefa 0%,#fbf7ee 100%);border:5px solid #6f572b;box-shadow:inset 0 0 0 2px #c9a45b,0 10px 28px rgba(0,0,0,.16)}
+.poster:before{content:"";position:absolute;inset:11px;border:1px solid rgba(122,108,84,.34);pointer-events:none;z-index:7}
 
-.person{position:relative;text-align:center;cursor:pointer;filter:drop-shadow(0 2px 2px rgba(40,30,15,.12))}
-.person.active .portrait{box-shadow:0 0 0 5px rgba(49,78,58,.2)}
-.portrait{width:70px;height:70px;margin:0 auto -7px;border-radius:50%;border:4px solid #fffaf0;outline:2px solid var(--gold);background:#ddd8ce;object-fit:cover;display:grid;place-items:center;font-weight:700;color:#6c685f;position:relative;z-index:2}
-.plate{min-width:94px;max-width:135px;margin:0 auto;background:linear-gradient(#fffef9,#f5ead2);border:1px solid var(--gold-dark);padding:9px 6px 7px;position:relative;z-index:1}
-.plate:before,.plate:after{content:"";position:absolute;top:5px;bottom:5px;width:7px;border-top:1px solid var(--gold-dark);border-bottom:1px solid var(--gold-dark)}
-.plate:before{left:-7px}.plate:after{right:-7px}
-.pname{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:13px;line-height:1.08;overflow-wrap:anywhere}
-.years{font-size:10px;color:#493f32;margin-top:3px}
+/* Versjon 4.0: diskret botanisk bakgrunn inspirert av den opprinnelige plakaten */
+.poster-decor{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+}
+.poster-decor .corner{
+  position:absolute;
+  width:132px;
+  height:132px;
+  opacity:.62;
+}
+.poster-decor .corner svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+.poster-decor .corner.tl{left:34px;top:24px}
+.poster-decor .corner.tr{right:34px;top:24px;transform:scaleX(-1)}
+.poster-decor .corner.bl{left:34px;bottom:34px;transform:scaleY(-1)}
+.poster-decor .corner.br{right:34px;bottom:34px;transform:scale(-1)}
 
-.g4 .portrait{width:47px;height:47px;border-width:2px;outline-width:1px}
-.g4 .plate{min-width:67px;max-width:78px;padding:6px 2px 5px}
-.g4 .pname{font-size:8px}
-.g4 .years{font-size:7px}
-.g3 .portrait{width:58px;height:58px}
-.g3 .plate{min-width:82px;max-width:98px}
-.g3 .pname{font-size:10px}
-.g2 .portrait{width:84px;height:84px}
-.g2 .plate{min-width:122px;max-width:145px}
-.g2 .pname{font-size:15px}
-.g2 .years{font-size:11px}
-.g1 .portrait{width:105px;height:105px}
-.g1 .plate{min-width:155px;max-width:180px;padding:11px 8px 9px}
-.g1 .pname{font-size:18px}
-.g1 .years{font-size:12px}
-.g0 .portrait{width:145px;height:145px;border-width:5px;outline-width:3px}
-.g0 .plate{min-width:220px;max-width:245px;padding:14px 12px 11px}
-.g0 .pname{font-size:27px;letter-spacing:1px}
-.g0 .years{font-size:16px}
+.poster-decor .tree-watermark{
+  position:absolute;
+  left:205px;
+  right:205px;
+  top:210px;
+  bottom:78px;
+  opacity:.34;
+}
+.poster-decor .tree-watermark svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+.poster-decor .ground-leaves{
+  position:absolute;
+  left:355px;
+  right:355px;
+  bottom:28px;
+  height:34px;
+  opacity:.48;
+}
+.poster-decor .ground-leaves svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
 
-.legend{position:absolute;left:46px;bottom:38px;font-size:12px;color:#5a5145;z-index:8}
-.quote{position:absolute;right:55px;bottom:40px;width:300px;text-align:center;font-family:Georgia,serif;font-style:italic;font-size:14px;z-index:8}
-.preview-exit{display:none;position:fixed;right:12px;top:12px;z-index:1000;background:#fff;color:var(--green);border:1px solid #d5cec2;box-shadow:0 3px 12px rgba(0,0,0,.15)}
-body.preview-mode .sidebar,body.preview-mode .toolbar{display:none}
-body.preview-mode .app{display:block}
-body.preview-mode .workspace{padding:12px;overflow:visible}
-body.preview-mode .poster-wrap{min-width:0;display:flex;justify-content:center}
-body.preview-mode .poster{transform-origin:top center}
-body.preview-mode .preview-exit{display:block}
+.poster-decor .soft-glow{
+  position:absolute;
+  left:50%;
+  bottom:24px;
+  width:420px;
+  height:250px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(224,211,169,.42) 0%,rgba(248,244,229,.18) 46%,rgba(255,255,255,0) 75%);
+  filter:blur(4px);
+}
+
+.title{position:absolute;top:34px;left:0;right:0;text-align:center;font:500 50px Georgia,"Times New Roman",serif;letter-spacing:4px;margin:0;z-index:8;color:#263c2d}.subtitle{position:absolute;top:105px;left:0;right:0;text-align:center;letter-spacing:4px;text-transform:uppercase;font-size:11px;z-index:8;color:#575147}.ornament{position:absolute;top:136px;left:570px;right:570px;border-top:1px solid rgba(109,84,40,.38);z-index:8}
+.connections{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:visible}
+.tree{position:absolute;left:34px;right:34px;top:148px;bottom:28px;z-index:4}
+.gen{
+  position:absolute;
+  left:0;
+  right:0;
+  height:1px;
+}
+.gen .person{
+  position:absolute;
+  left:var(--x);
+  top:0;
+  transform:translateX(-50%);
+}
+.gen .person:hover{
+  transform:translateX(-50%) translateY(-2px);
+}
+.g4{top:0}
+.g3{top:146px}
+.g2{top:316px}
+.g1{top:510px}
+.g0{top:696px}
+.person{position:relative;text-align:center;cursor:pointer;filter:drop-shadow(0 2px 2px rgba(40,30,15,.06));touch-action:manipulation}
+.person:hover .card-shell{box-shadow:0 5px 12px rgba(64,48,25,.12)}
+.person:focus-visible{outline:3px solid rgba(56,91,67,.35);outline-offset:4px;border-radius:10px}.person.active .card-shell{box-shadow:0 0 0 4px rgba(56,91,67,.17)}
+.card-shell{display:flex;flex-direction:column;align-items:center;background:#fffdf9;border:1px solid #cfc7bb;border-radius:8px;padding:8px 7px 9px;min-height:100%;transition:transform .15s ease,box-shadow .15s ease}
+.person.maternal .card-shell{background:var(--mother-bg);border-color:var(--mother)}.person.paternal .card-shell{background:var(--father-bg);border-color:var(--father)}.person.main-person .card-shell{background:#fafcf4;border-color:#7f9a69}
+.portrait{width:54px;height:54px;margin:0 auto 7px;border-radius:50%;border:2px solid #fff;outline:1px solid #c5bcae;background:radial-gradient(circle at 35% 30%,#eee9df,#d8d1c4);object-fit:cover;display:grid;place-items:center;font-weight:700;color:#6c685f;box-shadow:none}
+.plate{min-width:0;max-width:none;margin:0;padding:0;background:none!important;border:0!important;box-shadow:none!important}.pname{font:700 11px/1.12 Georgia,"Times New Roman",serif;overflow-wrap:break-word}.years{font-size:9px;color:#5a544b;margin-top:4px}
+.g4 .person{width:78px}.g4 .card-shell{height:124px;padding:7px 5px}.g4 .portrait{width:50px;height:50px}.g4 .pname{font-size:9px}.g4 .years{font-size:7.5px}
+.g3 .person{width:112px}.g3 .card-shell{height:150px}.g3 .portrait{width:68px;height:68px}.g3 .pname{font-size:12px}.g3 .years{font-size:9px}
+.g2 .person{width:146px}.g2 .card-shell{height:174px;padding-top:12px}.g2 .portrait{width:86px;height:86px}.g2 .pname{font-size:14px}.g2 .years{font-size:10px}
+.g1 .person{width:172px}.g1 .card-shell{height:180px;padding-top:12px}.g1 .portrait{width:96px;height:96px}.g1 .pname{font-size:16px}.g1 .years{font-size:11px}
+.g0 .person{width:210px}/* Hovedpersonkortet får nok høyde til bilde, navn på to linjer og årstall. */.g0 .card-shell{height:auto;min-height:194px;padding:10px 10px 12px}.g0 .portrait{width:104px;height:104px;outline-color:#7f9a69;flex:0 0 auto}.g0 .plate{display:flex;flex-direction:column;align-items:center;width:100%}.g0 .pname{font-size:20px;line-height:1.05;white-space:normal;margin:0}.g0 .years{font-size:12px;line-height:1.2;margin-top:4px;position:static}
+.quote{display:none}
+.preview-exit{display:none;position:fixed;right:12px;top:12px;z-index:1002;background:#fff;color:var(--green);border:1px solid #d5cec2;box-shadow:0 3px 12px rgba(0,0,0,.15);font-size:15px}.poster-controls{display:none;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:1002;background:rgba(255,255,255,.96);padding:6px;border-radius:12px;box-shadow:0 3px 15px rgba(0,0,0,.2);gap:5px}.poster-controls button{min-width:46px;padding:9px 12px;border-radius:8px;background:#ece8e0;color:#2f4835}
+.poster-controls #zoomReset{min-width:82px}
+.export-status{display:none;position:fixed;inset:0;z-index:2000;background:rgba(25,24,21,.62);align-items:center;justify-content:center;padding:20px}
+.export-status.show{display:flex}
+.export-status-box{max-width:360px;width:100%;background:#fffdf8;border:1px solid #d2c9bb;border-radius:12px;padding:20px;text-align:center;box-shadow:0 10px 35px rgba(0,0,0,.25)}
+.export-status-box strong{display:block;color:var(--green);font-size:18px;margin-bottom:7px}
+.export-status-box span{font-size:13px;color:var(--muted);line-height:1.45}
+
+body.preview-mode{overflow:hidden;background:#d9d5ce}body.preview-mode .sidebar,body.preview-mode .toolbar{display:none}body.preview-mode .app{display:block}body.preview-mode .workspace{position:fixed;inset:0;padding:0;overflow:hidden;background:#d9d5ce;z-index:999}body.preview-mode .poster-wrap{position:absolute;inset:0;min-width:0;width:100%;height:100%!important;overflow:hidden;display:block;touch-action:none;cursor:grab}body.preview-mode .poster-wrap.dragging{cursor:grabbing}body.preview-mode .poster{position:absolute;left:0;top:0;margin:0;transform-origin:0 0;will-change:transform;user-select:none}body.preview-mode .preview-exit{display:block}body.preview-mode .poster-controls{display:flex}
 @media(max-width:900px){
-  .app{grid-template-columns:1fr}
-  .sidebar{border-right:0;border-bottom:1px solid #d7d0c4}
+  body:not(.preview-mode){overflow-x:hidden}
+  body:not(.preview-mode) .app{display:block}
+  body:not(.preview-mode) .sidebar{
+    width:100%;
+    min-height:0;
+    border-right:0;
+    border-bottom:1px solid #d8d2c8;
+    padding:16px;
+  }
+  body:not(.preview-mode) .workspace{
+    display:block;
+    width:100%;
+    padding:14px 10px 22px;
+    overflow:hidden;
+    background:#d9d5ce;
+  }
+  body:not(.preview-mode) .toolbar{display:none}
+  body:not(.preview-mode) .poster-wrap{
+    position:relative;
+    width:100%;
+    min-width:0;
+    margin:0 auto;
+    overflow:hidden;
+    border-radius:5px;
+    box-shadow:0 5px 18px rgba(0,0,0,.18);
+    background:#f8f5ee;
+  }
+  body:not(.preview-mode) .poster{
+    position:absolute;
+    left:0;
+    top:0;
+    margin:0;
+    transform-origin:0 0;
+    will-change:transform;
+  }
+  .sidebar h1{font-size:25px}
+  .lead{font-size:13px}
+  .editor{padding:14px}
+  button,.file-btn{min-height:45px}
+  input,select,textarea{font-size:16px}
+  .preview-exit{top:10px;right:10px;max-width:calc(100vw - 20px)}
 }
 @media print{
-  @page{size:A3 landscape;margin:4mm}
-  body{background:#fff}
-  .sidebar,.toolbar,.preview-exit{display:none!important}
-  .app{display:block}
-  .workspace{padding:0;overflow:visible}
-  .poster-wrap{min-width:0;height:auto!important}
-  .poster{width:100%;height:auto;aspect-ratio:1.414/1;box-shadow:none;transform:none!important}
+  @page{size:A3 landscape;margin:0}
+  html,body{width:420mm;height:297mm;margin:0!important;background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  body{display:flex;align-items:center;justify-content:center;overflow:hidden!important}
+  .sidebar,.toolbar,.preview-exit,.poster-controls,.export-status{display:none!important}
+  .app{display:block;width:100%;height:100%}
+  .workspace{width:100%;height:100%;padding:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .poster-wrap{min-width:0;width:100%;height:100%!important;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .poster{
+    width:405mm!important;
+    height:286.47mm!important;
+    aspect-ratio:auto!important;
+    margin:0!important;
+    box-shadow:none!important;
+    transform:none!important;
+    overflow:hidden!important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .tree{top:148px;bottom:28px}
+  .g0{top:696px}
 }
 </style>
 </head>
 <body>
+<div class="export-status" id="exportStatus" role="status" aria-live="polite">
+  <div class="export-status-box">
+    <strong>Lager bildefilen …</strong>
+    <span>Dette kan ta noen sekunder når plakaten inneholder mange bilder.</span>
+  </div>
+</div>
+
 <button class="preview-exit" id="previewExit">Tilbake til redigering</button>
+<div class="poster-controls" id="posterControls" aria-label="Kontroller for plakaten">
+  <button type="button" id="zoomOut" aria-label="Zoom ut">−</button>
+  <button type="button" id="zoomReset" aria-label="Tilpass plakaten">Tilpass</button>
+  <button type="button" id="zoomIn" aria-label="Zoom inn">+</button>
+</div>
 <div class="app">
 <aside class="sidebar">
-  <h1>Mitt Slektstre</h1>
+  <h1>Mitt Slektstre</h1><div class="version-badge">Versjon 5.5</div>
   <p class="lead">Registrer én person om gangen. Plakaten oppdateres automatisk.</p>
   <div class="progress-head"><span id="stepText">Steg 1 av 31</span><span id="countText">0 registrert</span></div>
   <div class="progress"><div id="progressBar"></div></div>
@@ -159,6 +249,14 @@ body.preview-mode .preview-exit{display:block}
       <div class="field"><label for="birth">Fødselsår</label><input id="birth" type="number" placeholder="ÅÅÅÅ"></div>
       <div class="field"><label for="death">Dødsår</label><input id="death" type="number" placeholder="Valgfritt"></div>
     </div>
+
+    <details class="more-details" open>
+      <summary>Flere opplysninger</summary>
+      <div class="field">
+        <label for="biography">Biografi</label>
+        <textarea id="biography" placeholder="Skriv litt om personens liv, familie, interesser, arbeid og andre minner du ønsker å ta vare på."></textarea>
+      </div>
+    </details>
 
     <div class="field">
       <label>Bilde</label>
@@ -183,6 +281,7 @@ body.preview-mode .preview-exit{display:block}
   <div class="buttons">
     <button class="primary" id="showPoster">Vis ferdig plakat</button>
     <button class="secondary" id="printPoster">Skriv ut / lagre som PDF</button>
+    <button class="secondary" id="downloadImage">Last ned plakat som bilde</button>
     <button class="secondary" id="exportData">Eksporter sikkerhetskopi</button>
     <label class="file-btn alt" for="importData">Importer sikkerhetskopi</label>
     <input class="hidden" id="importData" type="file" accept=".json,application/json">
@@ -192,63 +291,97 @@ body.preview-mode .preview-exit{display:block}
 </aside>
 
 <main class="workspace">
+  <!-- Verktøylinjen ligger utenfor #poster og kommer derfor ikke med på PNG eller utskrift. -->
   <div class="toolbar">
     <span>Klikk på en person i plakaten for å redigere.</span>
     <div class="toolbar-actions">
       <button class="primary" id="topShowPoster">Vis plakat</button>
       <button class="secondary" id="topPrint">Lag PDF</button>
+      <button class="secondary" id="topDownloadImage">Last ned PNG</button>
     </div>
   </div>
 
   <div class="poster-wrap">
     <section class="poster" id="poster">
+      <div class="poster-decor" aria-hidden="true">
+        <div class="corner tl">
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 118 C4 88, 10 40, 48 18 C73 4, 105 9, 125 29" fill="none" stroke="#9caf94" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="44" cy="37" rx="11" ry="14" fill="#9caf94"/>
+            <ellipse cx="76" cy="24" rx="8" ry="11" fill="#9caf94"/>
+            <ellipse cx="98" cy="48" rx="12" ry="8" fill="#9caf94"/>
+          </svg>
+        </div>
+        <div class="corner tr">
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 118 C4 88, 10 40, 48 18 C73 4, 105 9, 125 29" fill="none" stroke="#9caf94" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="44" cy="37" rx="11" ry="14" fill="#9caf94"/>
+            <ellipse cx="76" cy="24" rx="8" ry="11" fill="#9caf94"/>
+            <ellipse cx="98" cy="48" rx="12" ry="8" fill="#9caf94"/>
+          </svg>
+        </div>
+        <div class="corner bl">
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 118 C4 88, 10 40, 48 18 C73 4, 105 9, 125 29" fill="none" stroke="#9caf94" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="44" cy="37" rx="11" ry="14" fill="#9caf94"/>
+            <ellipse cx="76" cy="24" rx="8" ry="11" fill="#9caf94"/>
+            <ellipse cx="98" cy="48" rx="12" ry="8" fill="#9caf94"/>
+          </svg>
+        </div>
+        <div class="corner br">
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 118 C4 88, 10 40, 48 18 C73 4, 105 9, 125 29" fill="none" stroke="#9caf94" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="44" cy="37" rx="11" ry="14" fill="#9caf94"/>
+            <ellipse cx="76" cy="24" rx="8" ry="11" fill="#9caf94"/>
+            <ellipse cx="98" cy="48" rx="12" ry="8" fill="#9caf94"/>
+          </svg>
+        </div>
+
+        <div class="soft-glow"></div>
+
+        <div class="tree-watermark">
+          <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke="#aab7a6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M500 665 C480 565, 482 490, 496 405 C508 330, 504 258, 520 178" stroke-width="34" opacity=".72"/>
+              <path d="M500 545 C410 475, 335 420, 246 364" stroke-width="18"/>
+              <path d="M500 545 C592 478, 670 425, 760 368" stroke-width="18"/>
+              <path d="M500 420 C442 375, 392 326, 336 258" stroke-width="14"/>
+              <path d="M500 420 C560 374, 615 324, 672 254" stroke-width="14"/>
+              <path d="M403 478 C338 440, 292 419, 228 406" stroke-width="10"/>
+              <path d="M600 480 C663 445, 712 422, 779 406" stroke-width="10"/>
+            </g>
+            <g fill="#aab7a6" opacity=".82">
+              <ellipse cx="198" cy="430" rx="48" ry="15" transform="rotate(-12 198 430)"/>
+              <ellipse cx="263" cy="453" rx="51" ry="16" transform="rotate(14 263 453)"/>
+              <ellipse cx="301" cy="377" rx="48" ry="15" transform="rotate(-22 301 377)"/>
+              <ellipse cx="353" cy="347" rx="46" ry="14" transform="rotate(28 353 347)"/>
+              <ellipse cx="785" cy="428" rx="48" ry="15" transform="rotate(12 785 428)"/>
+              <ellipse cx="730" cy="454" rx="50" ry="16" transform="rotate(-14 730 454)"/>
+              <ellipse cx="696" cy="376" rx="48" ry="15" transform="rotate(22 696 376)"/>
+              <ellipse cx="646" cy="344" rx="46" ry="14" transform="rotate(-28 646 344)"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="ground-leaves">
+          <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#9caf94">
+              <ellipse cx="90" cy="31" rx="62" ry="11"/>
+              <ellipse cx="205" cy="42" rx="68" ry="12"/>
+              <ellipse cx="325" cy="34" rx="64" ry="11"/>
+              <ellipse cx="450" cy="42" rx="68" ry="12"/>
+              <ellipse cx="575" cy="31" rx="62" ry="11"/>
+              <ellipse cx="690" cy="42" rx="68" ry="12"/>
+            </g>
+          </svg>
+        </div>
+      </div>
       <h1 class="title" id="posterTitle">MITT SLEKTSTRE</h1>
       <div class="subtitle">Familien er der livet begynner</div>
       <div class="ornament"></div>
-
-      <div class="oak" aria-hidden="true">
-        <svg viewBox="0 0 1200 780">
-          <defs>
-            <linearGradient id="trunk" x1="0" x2="1">
-              <stop offset="0" stop-color="#8f6a3f"/>
-              <stop offset=".5" stop-color="#b5905c"/>
-              <stop offset="1" stop-color="#7a5836"/>
-            </linearGradient>
-          </defs>
-          <g fill="none" stroke-linecap="round">
-            <path d="M600 780 C575 685 580 615 592 540 C605 455 610 360 600 275" stroke="url(#trunk)" stroke-width="46"/>
-            <path d="M595 635 C500 570 405 520 285 470" stroke="url(#trunk)" stroke-width="23"/>
-            <path d="M605 635 C700 570 795 520 915 470" stroke="url(#trunk)" stroke-width="23"/>
-            <path d="M590 520 C480 445 365 390 225 345" stroke="url(#trunk)" stroke-width="17"/>
-            <path d="M610 520 C720 445 835 390 975 345" stroke="url(#trunk)" stroke-width="17"/>
-            <path d="M596 405 C500 340 415 290 315 230" stroke="url(#trunk)" stroke-width="12"/>
-            <path d="M604 405 C700 340 785 290 885 230" stroke="url(#trunk)" stroke-width="12"/>
-            <path d="M600 320 C530 265 485 220 425 175" stroke="url(#trunk)" stroke-width="9"/>
-            <path d="M600 320 C670 265 715 220 775 175" stroke="url(#trunk)" stroke-width="9"/>
-          </g>
-          <g fill="#6f8d63">
-            <ellipse cx="270" cy="460" rx="70" ry="24" transform="rotate(-16 270 460)"/>
-            <ellipse cx="360" cy="500" rx="72" ry="25" transform="rotate(20 360 500)"/>
-            <ellipse cx="455" cy="555" rx="75" ry="25" transform="rotate(-17 455 555)"/>
-            <ellipse cx="930" cy="460" rx="70" ry="24" transform="rotate(16 930 460)"/>
-            <ellipse cx="840" cy="500" rx="72" ry="25" transform="rotate(-20 840 500)"/>
-            <ellipse cx="745" cy="555" rx="75" ry="25" transform="rotate(17 745 555)"/>
-            <ellipse cx="210" cy="330" rx="64" ry="22" transform="rotate(-15 210 330)"/>
-            <ellipse cx="335" cy="390" rx="65" ry="22" transform="rotate(25 335 390)"/>
-            <ellipse cx="990" cy="330" rx="64" ry="22" transform="rotate(15 990 330)"/>
-            <ellipse cx="865" cy="390" rx="65" ry="22" transform="rotate(-25 865 390)"/>
-            <ellipse cx="320" cy="220" rx="55" ry="19" transform="rotate(25 320 220)"/>
-            <ellipse cx="420" cy="285" rx="55" ry="19" transform="rotate(-25 420 285)"/>
-            <ellipse cx="880" cy="220" rx="55" ry="19" transform="rotate(-25 880 220)"/>
-            <ellipse cx="780" cy="285" rx="55" ry="19" transform="rotate(25 780 285)"/>
-          </g>
-        </svg>
-      </div>
-
       <svg class="connections" id="connections"></svg>
       <div class="tree" id="tree"></div>
-      <div class="legend">Fra hovedpersonen nederst til tippoldeforeldrene øverst.</div>
-      <div class="quote">«Røtter dypere enn vi vet, bånd sterkere enn tiden.»</div>
+      <div class="quote">«Familie er der livet begynner, og kjærligheten aldri tar slutt.»</div>
     </section>
   </div>
 </main>
@@ -317,16 +450,20 @@ function loadForm(){
   $('name').value=p.name||'';
   $('birth').value=p.birth||'';
   $('death').value=p.death||'';
+  $('biography').value=p.biography||'';
   updatePhotoPreview();
   fillSelect();
   updateProgress();
   renderTree();
 }
 function saveForm(){
+  const previous=people[currentSlot().id]||{};
   people[currentSlot().id]={
+    ...previous,
     name:$('name').value.trim(),
     birth:$('birth').value.trim(),
     death:$('death').value.trim(),
+    biography:$('biography').value.trim(),
     photo:pendingPhoto
   };
   saveStorage();
@@ -367,28 +504,55 @@ function renderTree(){
     slots.filter(s=>s.generation===g).forEach(s=>{
       const p=people[s.id]||{};
       const card=document.createElement('div');
-      card.className=`person ${s.id===currentSlot().id?'active':''}`;
+      const sideClass=s.generation===0?'main-person':(s.index<Math.pow(2,s.generation-1)?'maternal':'paternal');
+      card.className=`person ${sideClass} ${s.id===currentSlot().id?'active':''}`;
       card.dataset.slot=s.id;
 
+      // Fast koordinatsystem: hvert kort plasseres på midtpunktet
+      // i sin del av generasjonen. Barnets sentrum blir dermed alltid
+      // nøyaktig midt mellom sentrumspunktene til foreldrene.
+      const generationCount=Math.pow(2,s.generation);
+      const xPercent=((s.index+.5)/generationCount)*100;
+      card.style.setProperty('--x',`${xPercent}%`);
+
+      card.tabIndex=0;
+      card.setAttribute('role','button');
+      card.setAttribute('aria-label',`Rediger ${p.name||s.label}`);
+
+      const shell=document.createElement('div');shell.className='card-shell';
       if(p.photo){
         const img=document.createElement('img');
         img.className='portrait';img.src=p.photo;img.alt=p.name||s.label;
-        card.appendChild(img);
+        shell.appendChild(img);
       }else{
         const ph=document.createElement('div');
         ph.className='portrait';ph.textContent=initials(p.name);
-        card.appendChild(ph);
+        shell.appendChild(ph);
       }
 
       const plate=document.createElement('div');plate.className='plate';
       const name=document.createElement('div');name.className='pname';name.textContent=p.name||s.label;
       const years=document.createElement('div');years.className='years';
       years.textContent=p.birth?(p.death?`${p.birth}–${p.death}`:`${p.birth}–`):'';
-      plate.append(name,years);card.appendChild(plate);
+      plate.append(name,years);shell.appendChild(plate);card.appendChild(shell);
 
-      card.addEventListener('click',()=>{
+      const openPersonForEditing=()=>{
         current=slots.findIndex(x=>x.id===s.id);
+        if(document.body.classList.contains('preview-mode'))closePoster();
         loadForm();
+        if(isMobileView()){
+          requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
+        }
+      };
+      card.addEventListener('click',event=>{
+        event.stopPropagation();
+        openPersonForEditing();
+      });
+      card.addEventListener('keydown',event=>{
+        if(event.key==='Enter'||event.key===' '){
+          event.preventDefault();
+          openPersonForEditing();
+        }
       });
       row.appendChild(card);
     });
@@ -396,63 +560,390 @@ function renderTree(){
   }
   const main=people.g0_0;
   $('posterTitle').textContent=main?.name?`${firstName(main.name).toUpperCase()}S SLEKTSTRE`:'MITT SLEKTSTRE';
-  requestAnimationFrame(drawConnections);
+  requestAnimationFrame(()=>{
+    drawConnections();
+    fitInlineMobilePoster();
+  });
 }
 function drawConnections(){
-  const svg=$('connections'),poster=$('poster'),pr=poster.getBoundingClientRect();
+  const svg=$('connections');
+  const poster=$('poster');
+
   svg.innerHTML='';
-  svg.setAttribute('viewBox',`0 0 ${pr.width} ${pr.height}`);
-  const point=(id,top)=>{
-    const el=poster.querySelector(`[data-slot="${id}"]`);
+  svg.setAttribute('viewBox',`0 0 ${poster.offsetWidth} ${poster.offsetHeight}`);
+
+  const NS='http://www.w3.org/2000/svg';
+  const posterRect=poster.getBoundingClientRect();
+  const scaleX=posterRect.width/poster.offsetWidth;
+  const scaleY=posterRect.height/poster.offsetHeight;
+
+  const point=(generation,index,edge)=>{
+    const el=poster.querySelector(`[data-slot="g${generation}_${index}"]`);
     if(!el)return null;
-    const r=el.getBoundingClientRect();
-    return{x:r.left-pr.left+r.width/2,y:(top?r.top:r.bottom)-pr.top};
+
+    const rect=el.getBoundingClientRect();
+
+    return {
+      x:(rect.left-posterRect.left+rect.width/2)/scaleX,
+      y:edge==='top'
+        ?(rect.top-posterRect.top)/scaleY
+        :(rect.bottom-posterRect.top)/scaleY
+    };
   };
-  const add=(a,b)=>{
-    if(!a||!b)return;
-    const mid=(a.y+b.y)/2;
-    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
-    p.setAttribute('d',`M ${a.x} ${a.y} C ${a.x} ${mid}, ${b.x} ${mid}, ${b.x} ${b.y}`);
+
+  const addPath=(d,width=1.7,opacity=.72)=>{
+    const p=document.createElementNS(NS,'path');
+    p.setAttribute('d',d);
     p.setAttribute('fill','none');
-    p.setAttribute('stroke','#8b6a34');
-    p.setAttribute('stroke-width','2.2');
+    p.setAttribute('stroke','#8d7654');
+    p.setAttribute('stroke-width',width);
+    p.setAttribute('vector-effect','non-scaling-stroke');
     p.setAttribute('stroke-linecap','round');
-    p.setAttribute('opacity','.9');
+    p.setAttribute('stroke-linejoin','round');
+    p.setAttribute('opacity',opacity);
     svg.appendChild(p);
   };
-  for(let g=0;g<4;g++){
-    slots.filter(s=>s.generation===g).forEach(child=>{
-      add(point(child.id,true),point(`g${g+1}_${child.index*2}`,false));
-      add(point(child.id,true),point(`g${g+1}_${child.index*2+1}`,false));
-    });
+
+  for(let generation=0;generation<4;generation++){
+    const childCount=Math.pow(2,generation);
+
+    for(let childIndex=0;childIndex<childCount;childIndex++){
+      const leftParent=point(generation+1,childIndex*2,'bottom');
+      const rightParent=point(generation+1,childIndex*2+1,'bottom');
+      const child=point(generation,childIndex,'top');
+
+      if(!leftParent||!rightParent||!child)continue;
+
+      const joinY=Math.max(leftParent.y,rightParent.y)+22;
+      const familyCenterX=(leftParent.x+rightParent.x)/2;
+      const verticalGap=Math.max(34,child.y-joinY);
+
+      const leftCurve=
+        `M ${leftParent.x} ${leftParent.y} `+
+        `C ${leftParent.x} ${joinY-8}, ${familyCenterX-18} ${joinY}, ${familyCenterX} ${joinY}`;
+
+      const rightCurve=
+        `M ${rightParent.x} ${rightParent.y} `+
+        `C ${rightParent.x} ${joinY-8}, ${familyCenterX+18} ${joinY}, ${familyCenterX} ${joinY}`;
+
+      const childCurve=
+        `M ${familyCenterX} ${joinY} `+
+        `C ${familyCenterX} ${joinY+verticalGap*.35}, `+
+        `${child.x} ${child.y-verticalGap*.35}, `+
+        `${child.x} ${child.y}`;
+
+      addPath(leftCurve);
+      addPath(rightCurve);
+      addPath(childCurve,1.8,.74);
+    }
   }
 }
+const posterView={
+  scale:1,
+  minScale:.1,
+  maxScale:2,
+  x:0,
+  y:0,
+  dragging:false,
+  lastX:0,
+  lastY:0,
+  pinchDistance:0,
+  pinchScale:1,
+  lastTap:0
+};
+
+function isMobileView(){
+  return window.matchMedia('(max-width:900px)').matches;
+}
+function posterElements(){
+  return {
+    poster:$('poster'),
+    wrap:document.querySelector('.poster-wrap')
+  };
+}
+function clampPosterPosition(){
+  const {poster,wrap}=posterElements();
+  if(!poster||!wrap)return;
+  const w=poster.offsetWidth*posterView.scale;
+  const h=poster.offsetHeight*posterView.scale;
+  const vw=wrap.clientWidth;
+  const vh=wrap.clientHeight;
+
+  if(w<=vw) posterView.x=(vw-w)/2;
+  else posterView.x=Math.min(0,Math.max(vw-w,posterView.x));
+
+  if(h<=vh) posterView.y=(vh-h)/2;
+  else posterView.y=Math.min(0,Math.max(vh-h,posterView.y));
+}
+function applyPosterTransform(){
+  const {poster}=posterElements();
+  if(!poster)return;
+  clampPosterPosition();
+  poster.style.transform=`translate(${posterView.x}px,${posterView.y}px) scale(${posterView.scale})`;
+  requestAnimationFrame(drawConnections);
+}
+function fitInlineMobilePoster(){
+  const {poster,wrap}=posterElements();
+  if(!poster||!wrap)return;
+
+  if(document.body.classList.contains('preview-mode')||!isMobileView()){
+    if(!document.body.classList.contains('preview-mode')){
+      poster.style.transform='';
+      wrap.style.height='';
+    }
+    return;
+  }
+
+  const availableWidth=Math.max(1,wrap.clientWidth);
+  const scale=availableWidth/poster.offsetWidth;
+  const scaledHeight=poster.offsetHeight*scale;
+
+  poster.style.transform=`translate(0px,0px) scale(${scale})`;
+  wrap.style.height=`${scaledHeight}px`;
+
+  requestAnimationFrame(drawConnections);
+}
+
 function fitPoster(){
-  const poster=$('poster'),wrap=document.querySelector('.poster-wrap');
+  const {poster,wrap}=posterElements();
+  if(!poster||!wrap)return;
+
   if(!document.body.classList.contains('preview-mode')){
     poster.style.transform='';
     wrap.style.height='';
     return;
   }
-  const scale=Math.min(1,(window.innerWidth-24)/poster.offsetWidth);
-  poster.style.transform=`scale(${scale})`;
-  wrap.style.height=`${poster.offsetHeight*scale}px`;
-  requestAnimationFrame(drawConnections);
+
+  const padding=isMobileView()?8:24;
+  const availableW=Math.max(1,wrap.clientWidth-padding*2);
+  const availableH=Math.max(1,wrap.clientHeight-padding*2);
+
+  if(isMobileView()){
+    posterView.minScale=Math.min(availableW/poster.offsetWidth,availableH/poster.offsetHeight);
+    posterView.scale=availableW/poster.offsetWidth;
+    posterView.x=(wrap.clientWidth-poster.offsetWidth*posterView.scale)/2;
+    posterView.y=8;
+  }else{
+    posterView.minScale=Math.min(availableW/poster.offsetWidth,availableH/poster.offsetHeight);
+    posterView.scale=posterView.minScale;
+    posterView.x=(wrap.clientWidth-poster.offsetWidth*posterView.scale)/2;
+    posterView.y=(wrap.clientHeight-poster.offsetHeight*posterView.scale)/2;
+  }
+  applyPosterTransform();
+}
+function zoomPoster(factor,centerX,centerY){
+  const {wrap}=posterElements();
+  if(!wrap)return;
+  const rect=wrap.getBoundingClientRect();
+  const cx=(centerX??(rect.left+rect.width/2))-rect.left;
+  const cy=(centerY??(rect.top+rect.height/2))-rect.top;
+  const oldScale=posterView.scale;
+  const newScale=Math.min(posterView.maxScale,Math.max(posterView.minScale,oldScale*factor));
+  if(newScale===oldScale)return;
+
+  const posterPointX=(cx-posterView.x)/oldScale;
+  const posterPointY=(cy-posterView.y)/oldScale;
+  posterView.scale=newScale;
+  posterView.x=cx-posterPointX*newScale;
+  posterView.y=cy-posterPointY*newScale;
+  applyPosterTransform();
 }
 function openPoster(){
   saveForm();
   document.body.classList.add('preview-mode');
   window.scrollTo(0,0);
-  requestAnimationFrame(fitPoster);
+  requestAnimationFrame(()=>requestAnimationFrame(fitPoster));
 }
 function closePoster(){
   document.body.classList.remove('preview-mode');
-  fitPoster();
-  requestAnimationFrame(drawConnections);
+  const {poster}=posterElements();
+  poster.style.transform='';
+  posterView.dragging=false;
+  requestAnimationFrame(()=>{
+    fitInlineMobilePoster();
+    drawConnections();
+  });
 }
+function touchDistance(touches){
+  const dx=touches[0].clientX-touches[1].clientX;
+  const dy=touches[0].clientY-touches[1].clientY;
+  return Math.hypot(dx,dy);
+}
+function touchCenter(touches){
+  return {
+    x:(touches[0].clientX+touches[1].clientX)/2,
+    y:(touches[0].clientY+touches[1].clientY)/2
+  };
+}
+function setupPosterInteractions(){
+  const {wrap}=posterElements();
+  if(!wrap)return;
+
+  wrap.addEventListener('pointerdown',event=>{
+    if(!document.body.classList.contains('preview-mode')||event.pointerType==='touch')return;
+    posterView.dragging=true;
+    posterView.lastX=event.clientX;
+    posterView.lastY=event.clientY;
+    wrap.classList.add('dragging');
+    wrap.setPointerCapture?.(event.pointerId);
+  });
+  wrap.addEventListener('pointermove',event=>{
+    if(!posterView.dragging||event.pointerType==='touch')return;
+    posterView.x+=event.clientX-posterView.lastX;
+    posterView.y+=event.clientY-posterView.lastY;
+    posterView.lastX=event.clientX;
+    posterView.lastY=event.clientY;
+    applyPosterTransform();
+  });
+  const endPointer=()=>{
+    posterView.dragging=false;
+    wrap.classList.remove('dragging');
+  };
+  wrap.addEventListener('pointerup',endPointer);
+  wrap.addEventListener('pointercancel',endPointer);
+
+  wrap.addEventListener('wheel',event=>{
+    if(!document.body.classList.contains('preview-mode'))return;
+    event.preventDefault();
+    zoomPoster(event.deltaY<0?1.12:.89,event.clientX,event.clientY);
+  },{passive:false});
+
+  wrap.addEventListener('touchstart',event=>{
+    if(!document.body.classList.contains('preview-mode'))return;
+
+    const touchedPerson=event.target.closest?.('.person');
+    if(event.touches.length===1&&touchedPerson){
+      posterView.dragging=false;
+      return;
+    }
+
+    event.preventDefault();
+    if(event.touches.length===1){
+      posterView.dragging=true;
+      posterView.lastX=event.touches[0].clientX;
+      posterView.lastY=event.touches[0].clientY;
+    }else if(event.touches.length===2){
+      posterView.dragging=false;
+      posterView.pinchDistance=touchDistance(event.touches);
+      posterView.pinchScale=posterView.scale;
+    }
+  },{passive:false});
+
+  wrap.addEventListener('touchmove',event=>{
+    if(!document.body.classList.contains('preview-mode'))return;
+    if(event.touches.length===1&&!posterView.dragging)return;
+    event.preventDefault();
+    if(event.touches.length===1&&posterView.dragging){
+      const t=event.touches[0];
+      posterView.x+=t.clientX-posterView.lastX;
+      posterView.y+=t.clientY-posterView.lastY;
+      posterView.lastX=t.clientX;
+      posterView.lastY=t.clientY;
+      applyPosterTransform();
+    }else if(event.touches.length===2){
+      const distance=touchDistance(event.touches);
+      const center=touchCenter(event.touches);
+      const target=posterView.pinchScale*(distance/posterView.pinchDistance);
+      const factor=target/posterView.scale;
+      zoomPoster(factor,center.x,center.y);
+    }
+  },{passive:false});
+
+  wrap.addEventListener('touchend',event=>{
+    posterView.dragging=false;
+    if(event.touches.length<2)posterView.pinchDistance=0;
+  },{passive:false});
+
+  wrap.addEventListener('dblclick',event=>{
+    if(!document.body.classList.contains('preview-mode'))return;
+    if(posterView.scale>posterView.minScale*1.7)fitPoster();
+    else zoomPoster(2,event.clientX,event.clientY);
+  });
+}
+
+
+function loadHtml2Canvas(){
+  if(window.html2canvas)return Promise.resolve(window.html2canvas);
+  return new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-html2canvas]');
+    if(existing){
+      existing.addEventListener('load',()=>resolve(window.html2canvas),{once:true});
+      existing.addEventListener('error',reject,{once:true});
+      return;
+    }
+    const script=document.createElement('script');
+    script.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    script.dataset.html2canvas='true';
+    script.onload=()=>resolve(window.html2canvas);
+    script.onerror=()=>reject(new Error('Kunne ikke laste bildebiblioteket.'));
+    document.head.appendChild(script);
+  });
+}
+function safeFileName(text){
+  return (text||'mitt-slektstre')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'')||'mitt-slektstre';
+}
+async function downloadPosterImage(){
+  saveForm();
+  const status=$('exportStatus');
+  status.classList.add('show');
+
+  try{
+    const html2canvas=await loadHtml2Canvas();
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    drawConnections();
+    await new Promise(resolve=>setTimeout(resolve,120));
+
+    const poster=$('poster');
+    const oldTransform=poster.style.transform;
+    poster.style.transform='none';
+
+    const canvas=await html2canvas(poster,{
+      backgroundColor:'#fffdf8',
+      scale:2,
+      useCORS:true,
+      allowTaint:false,
+      logging:false,
+      width:poster.offsetWidth,
+      height:poster.offsetHeight,
+      windowWidth:poster.offsetWidth,
+      windowHeight:poster.offsetHeight,
+      scrollX:0,
+      scrollY:0
+    });
+
+    poster.style.transform=oldTransform;
+
+    const mainName=people.g0_0?.name;
+    const filename=`${safeFileName(mainName?firstName(mainName)+'s-slektstre':'mitt-slektstre')}.png`;
+
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+    if(!blob)throw new Error('Nettleseren kunne ikke lage bildefilen.');
+
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download=filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }catch(error){
+    console.error(error);
+    alert('Kunne ikke lage bildefilen. Kontroller at enheten er koblet til internett, og prøv igjen.');
+  }finally{
+    status.classList.remove('show');
+    requestAnimationFrame(drawConnections);
+  }
+}
+
 function exportBackup(){
   saveForm();
-  const blob=new Blob([JSON.stringify({app:'Mitt Slektstre 4.0',people},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({app:'Mitt Slektstre 5.5',people},null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download='slektstre-sikkerhetskopi.json';
@@ -486,12 +977,34 @@ $('removePhoto').onclick=()=>{pendingPhoto='';updatePhotoPreview()};
 $('camera').onchange=e=>useImage(e.target.files[0]);
 $('gallery').onchange=e=>useImage(e.target.files[0]);
 $('name').oninput=updatePhotoPreview;
-$('personSelect').onchange=e=>{saveForm();current=slots.findIndex(s=>s.id===e.target.value);loadForm()};
+$('personSelect').onchange=e=>{
+  // Ta vare på valget før saveForm() bygger listen på nytt.
+  // Ellers blir verdien satt tilbake til personen som allerede var åpen.
+  const selectedId=e.target.value;
+  saveForm();
+  const selectedIndex=slots.findIndex(s=>s.id===selectedId);
+  if(selectedIndex!==-1)current=selectedIndex;
+  loadForm();
+};
 $('showPoster').onclick=openPoster;
 $('topShowPoster').onclick=openPoster;
 $('previewExit').onclick=closePoster;
+$('zoomIn').onclick=()=>zoomPoster(1.25);
+$('zoomOut').onclick=()=>zoomPoster(.8);
+$('zoomReset').onclick=()=>{
+  const {poster,wrap}=posterElements();
+  if(!poster||!wrap)return;
+  const padding=8;
+  posterView.minScale=(wrap.clientWidth-padding*2)/poster.offsetWidth;
+  posterView.scale=posterView.minScale;
+  posterView.x=(wrap.clientWidth-poster.offsetWidth*posterView.scale)/2;
+  posterView.y=(wrap.clientHeight-poster.offsetHeight*posterView.scale)/2;
+  applyPosterTransform();
+};
 $('printPoster').onclick=()=>{saveForm();setTimeout(()=>window.print(),100)};
 $('topPrint').onclick=()=>{saveForm();setTimeout(()=>window.print(),100)};
+$('downloadImage').onclick=downloadPosterImage;
+$('topDownloadImage').onclick=downloadPosterImage;
 $('exportData').onclick=exportBackup;
 $('importData').onchange=e=>importBackup(e.target.files[0]);
 $('resetAll').onclick=()=>{
@@ -500,8 +1013,22 @@ $('resetAll').onclick=()=>{
   }
 };
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePoster()});
-window.addEventListener('resize',()=>{requestAnimationFrame(drawConnections);requestAnimationFrame(fitPoster)});
+window.addEventListener('resize',()=>{
+  requestAnimationFrame(()=>{
+    if(document.body.classList.contains('preview-mode'))fitPoster();
+    else fitInlineMobilePoster();
+    drawConnections();
+  });
+});
+setupPosterInteractions();
 loadForm();
+window.addEventListener('load',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    fitInlineMobilePoster();
+    drawConnections();
+  }));
+});
+document.fonts?.ready?.then(()=>requestAnimationFrame(drawConnections));
 </script>
 </body>
 </html>
